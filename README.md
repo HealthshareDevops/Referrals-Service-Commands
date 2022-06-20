@@ -1,2 +1,2 @@
-# Referrals-Service
+# Referrals-Service-Commands
 Referrals service repository
