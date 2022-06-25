@@ -1,0 +1,265 @@
+﻿AWSTemplateFormatVersion: 2010-09-09
+Description: "Creates API Gateway and SQS to receive and store referrals payloads/messages."
+Parameters: 
+  ProjectName: 
+    Type: String
+    Default: ReferralsService
+  Environment: 
+    Type: String
+    Default: sandbox
+  BucketName:
+    Type: String
+  CodeKey:
+    Type: String
+  ParamStoreKMSMasterKeyIdARN: 
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /ReferralsService/sandbox/CloudFormation/KMS-Master-KeyIdARN
+  ParamStoreLambdaSecurityGroupIds: 
+    Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
+    Description: "VPC security group ids to attach to lambda"
+  ParamStoreLambdaSubnetIds: 
+    Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
+    Description: "The VPC subnet ids to attach to lambda"
+
+Resources:
+  
+  MessageApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: API Gateway to receive referrals information / payloads / messages from different sources
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Name: Referrals-Message-APIGateway
+  
+  MessageApiGatewayRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+        Version: 2012-10-17
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action: sqs:SendMessage
+                Effect: Allow
+                Resource: !GetAtt MessageQueueFifo.Arn
+              - Action:
+                  - kms:DescribeKey
+                  - kms:GenerateDataKey
+                  - kms:Decrypt
+                Effect: Allow
+                Resource: !Ref ParamStoreKMSMasterKeyIdARN
+              - Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource: '*'
+            Version: 2012-10-17
+          PolicyName: Referrals-ApiG-SQS-SendMessage-Policy
+      RoleName: Referrals-ApiG-SQS-SendMessage-Role
+  
+  MessageApiGatewayCloudWatchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+      RoleName: Referrals-ApiG-CloudWatch-Role
+
+  MessageApiGatewayAccount:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt MessageApiGatewayCloudWatchRole.Arn
+
+  MessageApiGatewayMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      Integration:
+        Credentials: !GetAtt 'MessageApiGatewayRole.Arn'
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - StatusCode: '200'
+        PassthroughBehavior: NEVER
+        RequestParameters:
+          integration.request.header.Content-Type: '''application/x-www-form-urlencoded'''
+        RequestTemplates:
+          application/json: Action=SendMessage&MessageBody=$util.urlEncode($input.body)&MessageGroupId=100
+        Type: AWS
+        Uri: !Join
+          - ''
+          - - 'arn:aws:apigateway:'
+            - !Ref 'AWS::Region'
+            - :sqs:path/
+            - !Ref 'AWS::AccountId'
+            - /
+            - !GetAtt MessageQueueFifo.QueueName
+      MethodResponses:
+        - ResponseModels:
+            application/json: Empty
+          StatusCode: '200'
+      ResourceId: !Ref MessageApiGatewayResource
+      RestApiId: !Ref MessageApiGateway
+  
+  MessageApiGatewayResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MessageApiGateway.RootResourceId
+      PathPart: enqueue
+      RestApiId: !Ref MessageApiGateway
+  
+  MessageApiDeployment: 
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - MessageApiGatewayMethod
+    Properties: 
+      RestApiId: !Ref MessageApiGateway
+      StageName: sandbox
+        
+  MessageQueueFifo:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: Referrals-MessageFifoQueue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      VisibilityTimeout: 180
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DeadLetterMessageFifoQueue.Arn
+        maxReceiveCount: 1
+      KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
+  
+  DeadLetterMessageFifoQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: Referrals-DeadLetterMessageFifoQueue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
+  
+  MessageLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: Referrals-Message-Lambda-Role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+      Policies:
+        - 
+          PolicyName: Referrals-Message-Lambda-Policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - 
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource: '*'
+              - 
+                Action:
+                  - kms:DescribeKey
+                  - kms:GenerateDataKey
+                  - kms:Decrypt
+                Effect: Allow
+                Resource: !Ref ParamStoreKMSMasterKeyIdARN
+
+  MessageLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: Referrals-MessageLambda
+      Role: !GetAtt MessageLambdaRole.Arn
+      Code:
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref CodeKey
+      Environment:
+        Variables:
+          PARAMETERSTORE_PATH: !Join
+          - ''
+          - - /
+            - !Ref ProjectName
+            - /
+            - !Ref Environment
+      Runtime: dotnet6
+      Handler: MessageProcessor.Lambda::MessageProcessor.Lambda.Function::FunctionHandler
+      MemorySize: 1024
+      Timeout: 180
+      VpcConfig:
+        SecurityGroupIds: !Ref ParamStoreLambdaSecurityGroupIds
+        SubnetIds: !Ref ParamStoreLambdaSubnetIds
+
+  MessageLambdaEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !GetAtt MessageQueueFifo.Arn
+      FunctionName: !GetAtt MessageLambda.Arn
+
+  NewMessageEventQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: Referrals-NewMessageEvent-Queue
+      KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
+
+  NewMessageSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: Referrals-NewMessage-SNS
+      KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
+      Subscription: 
+        - Endpoint: !GetAtt NewMessageEventQueue.Arn
+          Protocol: sqs
+  
+  NewMessageEventQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument: 
+        Version: 2012-10-17
+        Id: Referrals-SNS-SQS-NewSendMessage-QueuePolicy
+        Statement: 
+          - Sid: Allow-SNS-SendMessage
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - sqs:SendMessage
+            Resource: !GetAtt NewMessageEventQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref NewMessageSNSTopic
+      Queues:
+        - !Ref NewMessageEventQueue
+
