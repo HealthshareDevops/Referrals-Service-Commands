@@ -1,0 +1,95 @@
+﻿{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application that uses the ASP.NET Core framework running in Amazon Lambda.",
+  "Parameters": { 
+    "ProjectName": {
+      "Type": "String",
+      "Default": "ReferralsService"
+    },
+    "Environment": {
+      "Type": "String",
+      "Default": "sandbox"
+    },
+    "BucketName": {
+      "Type": "String"
+    },
+    "CodeKey": {
+      "Type": "String"
+    },
+    "ParamStoreLambdaSecurityGroupIds": {
+      "Type": "AWS::SSM::Parameter::Value<CommaDelimitedList>",
+      "Description": "VPC security group ids to attach to the lambda"
+    },
+    "ParamStoreLambdaSubnetIds": {
+      "Type": "AWS::SSM::Parameter::Value<CommaDelimitedList>",
+      "Description": "The VPC subnet ids to attach to the lambda"
+    }
+  },
+  "Conditions": {},
+  "Resources": {
+    "ReferralsServiceAPIGateway": {
+      "Type": "AWS::Serverless::Api",
+      "Properties": {
+        "StageName": { "Ref": "Environment" }
+      }
+    },
+    "ReferralsServiceLambda": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "ReferralsService.WebAPI::ReferralsService.WebAPI.LambdaEntryPoint::FunctionHandlerAsync",
+        "Runtime": "dotnet6",
+        "CodeUri": {
+          "Bucket": { "Ref": "BucketName" },
+          "Key": { "Ref": "CodeKey" }
+        },
+        "MemorySize": 3072,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambda_FullAccess",
+          "AmazonSSMReadOnlyAccess",
+          "AWSLambdaBasicExecutionRole",
+          "AWSLambdaVPCAccessExecutionRole"
+        ],
+        "Environment": {
+          "Variables": { "PARAMETERSTORE_PATH": {"Fn::Sub": "/${ProjectName}/${Environment}" }}
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": {"Ref": "ParamStoreLambdaSecurityGroupIds" },
+          "SubnetIds": {"Ref": "ParamStoreLambdaSubnetIds" }
+        },
+        "Events": {
+          "ProxyResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "ANY",
+              "RestApiId": {
+                "Ref": "ReferralsServiceAPIGateway"
+              }
+            }
+          },
+          "RootResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "ANY",
+              "RestApiId": {
+                "Ref": "ReferralsServiceAPIGateway"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ReferralsServiceAPIGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/"
+      }
+    }
+  }
+}
