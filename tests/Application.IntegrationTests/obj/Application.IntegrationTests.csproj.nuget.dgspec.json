@@ -1,0 +1,400 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/tests/Application.IntegrationTests/Application.IntegrationTests.csproj": {}
+  },
+  "projects": {
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj",
+        "projectName": "Referrals_Service_Command_CA.Application",
+        "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj",
+        "packagesPath": "/Users/kodeengatai/.nuget/packages/",
+        "outputPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/kodeengatai/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/Domain.csproj": {
+                "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/Domain.csproj",
+        "projectName": "Referrals_Service_Command_CA.Domain",
+        "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/Domain.csproj",
+        "packagesPath": "/Users/kodeengatai/.nuget/packages/",
+        "outputPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/kodeengatai/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[10.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/Infrastructure.csproj",
+        "projectName": "Referrals_Service_Command_CA.Infrastructure",
+        "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/Infrastructure.csproj",
+        "packagesPath": "/Users/kodeengatai/.nuget/packages/",
+        "outputPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/kodeengatai/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj": {
+                "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[15.0.10, )"
+            },
+            "Microsoft.AspNetCore.ApiAuthorization.IdentityServer": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/WebUI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/WebUI.csproj",
+        "projectName": "Referrals_Service_Command_CA.WebUI",
+        "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/WebUI.csproj",
+        "packagesPath": "/Users/kodeengatai/.nuget/packages/",
+        "outputPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/kodeengatai/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj": {
+                "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Application/Application.csproj"
+              },
+              "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/Infrastructure.csproj": {
+                "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/Infrastructure/Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[10.3.4, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.AspNetCore.SpaProxy": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "NSwag.AspNetCore": {
+              "target": "Package",
+              "version": "[13.16.0, )"
+            },
+            "NSwag.MSBuild": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[13.16.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/tests/Application.IntegrationTests/Application.IntegrationTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/tests/Application.IntegrationTests/Application.IntegrationTests.csproj",
+        "projectName": "Referrals_Service_Command_CA.Application.IntegrationTests",
+        "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/tests/Application.IntegrationTests/Application.IntegrationTests.csproj",
+        "packagesPath": "/Users/kodeengatai/.nuget/packages/",
+        "outputPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/tests/Application.IntegrationTests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/kodeengatai/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/WebUI.csproj": {
+                "projectPath": "/Users/kodeengatai/Documents/GitHub/Referrals-Service-Commands/src/WebUI/WebUI.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[6.7.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.2.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.18.1, )"
+            },
+            "NUnit3TestAdapter": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.2.1, )"
+            },
+            "Respawn": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
+            "nunit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
