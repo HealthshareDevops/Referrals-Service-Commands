@@ -12,6 +12,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ReferralsServiceCommands.Lambda\ReferralsServiceCommands.Lambda.csproj" />
+    <ProjectReference Include="..\..\src\MessageLambda\MessageLambda.csproj" />
   </ItemGroup>
 </Project>

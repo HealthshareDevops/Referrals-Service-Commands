@@ -2,7 +2,7 @@ using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
 
-namespace ReferralsServiceCommands.Lambda.Tests;
+namespace MessageLambda.Tests;
 
 public class FunctionTest
 {
