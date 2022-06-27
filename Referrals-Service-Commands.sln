@@ -18,10 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReferralsServiceCommands.La
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReferralsServiceCommands.Lambda.Tests", "tests\ReferralsServiceCommands.Lambda.Tests\ReferralsServiceCommands.Lambda.Tests.csproj", "{E3E83BAE-5D75-4AF4-A869-DFA25E08B900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{33BD2653-D023-4049-8782-1785E599883B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{86329737-F1DF-4870-9829-5052C68C957E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,14 +32,6 @@ Global
 		{E3E83BAE-5D75-4AF4-A869-DFA25E08B900}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3E83BAE-5D75-4AF4-A869-DFA25E08B900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3E83BAE-5D75-4AF4-A869-DFA25E08B900}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33BD2653-D023-4049-8782-1785E599883B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33BD2653-D023-4049-8782-1785E599883B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33BD2653-D023-4049-8782-1785E599883B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33BD2653-D023-4049-8782-1785E599883B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86329737-F1DF-4870-9829-5052C68C957E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86329737-F1DF-4870-9829-5052C68C957E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86329737-F1DF-4870-9829-5052C68C957E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86329737-F1DF-4870-9829-5052C68C957E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,8 +39,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{38482CB3-7525-4C0D-A0FF-7ABFB66542E5} = {F22680B7-8B87-4C36-8EA3-66D5D7AB5611}
 		{E3E83BAE-5D75-4AF4-A869-DFA25E08B900} = {A2B7FB5D-35CB-4C85-B4C1-86941A9AB210}
-		{33BD2653-D023-4049-8782-1785E599883B} = {F22680B7-8B87-4C36-8EA3-66D5D7AB5611}
-		{86329737-F1DF-4870-9829-5052C68C957E} = {F22680B7-8B87-4C36-8EA3-66D5D7AB5611}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF47FBDD-15A9-40F5-83AF-7D18784BF198}
