@@ -9,6 +9,8 @@ on:
 
 env:
   DOTNET_VERSION: '6.0.x'
+  PUBLISH_DIR: ./bin/Release/net6.0/publish
+  PUBLISH_FRAMEWORK: 'net6.0'
 
 jobs:
 
@@ -18,7 +20,7 @@ jobs:
     defaults:
       run:
         working-directory: ./src/MessageLambda
-        
+
     steps:
       - uses: actions/checkout@v3
 
@@ -35,7 +37,16 @@ jobs:
       
       - name: Test project
         run: dotnet test --no-build --verbosity normal
-          
+
+      - name: Publish project
+        run: dotnet publish --output ${{env.PUBLISH_DIR}} --configuration "Release" --framework ${{env.PUBLISH_FRAMEWORK}} /p:GenerateRuntimeConfigurationFiles=true --runtime linux-x64 --self-contained false 
+        
+      - name: Just testing workflow
+        run: |
+          pwd
+          echo ls
+          ls
+        
       - name: Run a one-line script
         run: echo Hello, world!
 
