@@ -11,7 +11,9 @@ env:
   DOTNET_VERSION: 6.0.x
   PUBLISH_DIR: ./bin/Release/net6.0/publish
   PUBLISH_FRAMEWORK: net6.0
-
+  ENVIRONMENT_NAME: sandbox
+  PROJECT_NAME: ReferralsServiceCommands    
+  
 jobs:
 
   build-ReferralsServiceCommands-sandbox:
@@ -46,7 +48,13 @@ jobs:
 
       - name: Zip output 
         run: zip -qq -r ${{env.PUBLISH_DIR}}/${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip ${{env.PUBLISH_DIR}}
-        
+
+      - name: Just testing workflow
+        run: |
+          pwd
+          echo ls
+          ls ${{env.PUBLISH_DIR}}
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
