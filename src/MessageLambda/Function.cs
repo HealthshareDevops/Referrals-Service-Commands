@@ -14,8 +14,10 @@ public class Function
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public string FunctionHandler(string input, ILambdaContext context)
+    public void FunctionHandler(ILambdaContext context)
     {
-        return input.ToUpper();
+        context.Logger.LogInformation($"INFO: Function.FunctionHandler start...");
+        context.Logger.LogInformation($"INFO: Function.FunctionHandler - Yeah, yeah !!!");
+        context.Logger.LogInformation($"INFO: Function.FunctionHandler end...");
     }
 }

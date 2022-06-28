@@ -9,17 +9,21 @@ Parameters:
     Default: sandbox
   BucketName:
     Type: String
+    Default: referrals-service-commands-sandbox
   CodeKey:
     Type: String
+    Default: ReferralsServiceCommands-sandbox-1.zip
   ParamStoreKMSMasterKeyIdARN: 
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /ReferralsService/sandbox/CloudFormation/KMS-Master-KeyIdARN
+    Default: /ReferralsServiceCommands/sandbox/CloudFormation/KMS-Master-KeyIdARN
   ParamStoreLambdaSecurityGroupIds: 
     Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
     Description: "VPC security group ids to attach to lambda"
+    Default: /ReferralsServiceCommands/sandbox/CloudFormation/Lambda-Security-GroupIds
   ParamStoreLambdaSubnetIds: 
     Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
     Description: "The VPC subnet ids to attach to lambda"
+    Default: /ReferralsServiceCommands/sandbox/CloudFormation/Lambda-SubnetIds
 
 Resources:
   ReferralsMessageApi:
@@ -137,19 +141,19 @@ Resources:
   ReferralsMessageQueueFifo:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: Referrals-MessageFifoQueue.fifo
+      QueueName: Referrals-Message-QueueFifo.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       VisibilityTimeout: 180
       RedrivePolicy:
-        deadLetterTargetArn: !GetAtt DeadLetterMessageFifoQueue.Arn
+        deadLetterTargetArn: !GetAtt ReferralsMessageDLQueueFifo.Arn
         maxReceiveCount: 1
       KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
   
   ReferralsMessageDLQueueFifo:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: Referrals-DeadLetterMessageFifoQueue.fifo
+      QueueName: Referrals-Message-DLQueueFifo.fifo
       FifoQueue: true
       ContentBasedDeduplication: true
       KmsMasterKeyId: !Ref ParamStoreKMSMasterKeyIdARN
