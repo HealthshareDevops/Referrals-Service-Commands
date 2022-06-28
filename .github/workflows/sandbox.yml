@@ -9,7 +9,7 @@ on:
 
 env:
   DOTNET_VERSION: 6.0.x
-  PUBLISH_DIR: ./bin/Release/net6.0/publish
+  PUBLISH_DIR: /bin/Release/net6.0/publish
   PUBLISH_FRAMEWORK: net6.0
   ENVIRONMENT_NAME: sandbox
   PROJECT_NAME: ReferralsServiceCommands    
@@ -21,7 +21,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./src/MessageLambda
+        working-directory: /src/MessageLambda
 
     steps:
       - uses: actions/checkout@v3
