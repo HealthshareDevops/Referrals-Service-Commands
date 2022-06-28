@@ -9,10 +9,11 @@ on:
 
 env:
   DOTNET_VERSION: 6.0.x
-  PUBLISH_DIR: /bin/Release/net6.0/publish
+  PUBLISH_DIR: ./bin/Release/net6.0/publish
   PUBLISH_FRAMEWORK: net6.0
   ENVIRONMENT_NAME: sandbox
-  PROJECT_NAME: ReferralsServiceCommands    
+  PROJECT_NAME: ReferralsServiceCommands-MessageLambda
+  AWS_S3_BUCKET: referrals-service-commands-sandbox 
   
 jobs:
 
@@ -21,7 +22,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: /src/MessageLambda
+        working-directory: ./src/MessageLambda
 
     steps:
       - uses: actions/checkout@v3
@@ -48,6 +49,17 @@ jobs:
 
       - name: Zip output 
         run: zip -qq -r ${{env.PUBLISH_DIR}}/${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip ${{env.PUBLISH_DIR}}
+
+      - name: Configure AWS credentials from sandbox account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.SANDBOX_AWS_ACCESS_KEY}}
+          aws-secret-access-key: ${{secrets.SANDBOX_AWS_SECRET_KEY}}
+          aws-session-token: ${{secrets.SANDBOX_AWS_SESSION_TOKEN}}
+          aws-region: ap-southeast-2
+      
+      - name: Copy files to the test website with the AWS CLI
+        run: aws s3 cp ${{env.PUBLISH_DIR}}/${{ env.PROJECT_NAME }}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip s3://${{env.AWS_S3_BUCKET}}
 
       - name: Just testing workflow
         run: |
