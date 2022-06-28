@@ -15,6 +15,10 @@ jobs:
   build-ReferralsServiceCommands-sandbox:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./src/MessageLambda
+        
     steps:
       - uses: actions/checkout@v3
 
@@ -23,10 +27,14 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore dependencies
-        run: | 
-          pwd
-          ls
+      - name: Restore project dependencies
+        run: dotnet restore
+      
+      - name: Build project
+        run: dotnet build --no-restore 
+      
+      - name: Test project
+        run: dotnet test --no-build --verbosity normal
           
       - name: Run a one-line script
         run: echo Hello, world!
