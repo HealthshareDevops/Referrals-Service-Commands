@@ -22,7 +22,7 @@ jobs:
   build-ReferralsServiceCommands-sandbox:
     runs-on: ubuntu-latest
 
-    environment: ${{env.ENVIRONMENT_NAME}}
+    environment: sandbox
 
     defaults:
       run:
