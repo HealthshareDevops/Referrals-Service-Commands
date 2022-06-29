@@ -80,4 +80,5 @@ jobs:
             ParamStoreLambdaSecurityGroupIds=/${{env.PROJECT_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-Security-GroupIds,
             ParamStoreLambdaSubnetIds=/${{env.PROJECT_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-SubnetIds
           capabilities: "CAPABILITY_IAM, CAPABILITY_NAMED_IAM, CAPABILITY_AUTO_EXPAND"
-
+          role-arn: ${{secrets.DEV_AWS_CFN_EXECUTION_ROLE}}
+          
