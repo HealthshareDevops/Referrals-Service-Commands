@@ -22,8 +22,8 @@ jobs:
   build-ReferralsServiceCommands-sandbox:
     runs-on: ubuntu-latest
 
-    environment: sandbox
-    
+    environment: ${{env.ENVIRONMENT_NAME}}
+
     defaults:
       run:
         working-directory: ./src/MessageLambda

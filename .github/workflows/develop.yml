@@ -22,6 +22,8 @@ jobs:
   build-ReferralsServiceCommands-dev:
     runs-on: ubuntu-latest
 
+    environment: ${{env.ENVIRONMENT_NAME}}
+
     defaults:
       run:
         working-directory: ./src/MessageLambda
