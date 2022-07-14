@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  'AWS::CloudFormation::Designer':
+    3ac6e1b1-2825-421e-88dd-a55ebd3f22f4:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 392.56559569675215
+        'y': 191.34221291457095
+      z: 0
+      embeds: []
+Resources:
+  DynamoDBReferralsEventStore:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: event-store
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 3ac6e1b1-2825-421e-88dd-a55ebd3f22f4
