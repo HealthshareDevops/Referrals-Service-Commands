@@ -1,5 +1,4 @@
-name: Referrals service commands CI/CD pipeline for dev environment.
-
+name: Referral Service Commands CI/CD pipeline for test environment.
 
 on:
   push:
@@ -11,18 +10,22 @@ env:
   DOTNET_VERSION: 6.0.x
   PUBLISH_DIR: ./bin/Release/net6.0/publish
   PUBLISH_FRAMEWORK: net6.0
+  DOMAIN_NAME: PatientReferralService
   ENVIRONMENT_NAME: test
-  PROJECT_NAME: ReferralsServiceCommands
-  AWS_S3_BUCKET: referrals-service-commands-test
-  AWS_STACKNAME: ReferralsServiceCommands-test
-  CFN_TEMPLATE: ./cloudformation/referrals-service-commands-message-cfn.yaml
+  AWS_S3_BUCKET: patient-referral-service-test
+  AWS_REGION: ap-southeast-2
   
 jobs:
 
-  build-ReferralsServiceCommands-test:
+  build-ReferralServiceCommand-test:
     runs-on: ubuntu-latest
 
     environment: test
+    
+    env:
+      PROJECT_NAME: ReferralServiceCommand
+      AWS_STACKNAME: ReferralServiceCommand-test
+      CFN_TEMPLATE: ./cloudformation/referral-service-command-message-cfn.yaml
 
     defaults:
       run:
@@ -52,15 +55,16 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output 
-        run: zip -qq -r ${{env.PUBLISH_DIR}}/${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip ${{env.PUBLISH_DIR}}
+        run: zip -qq -r ${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip .
+        working-directory: ./src/MessageLambda/${{env.PUBLISH_DIR}}
 
       - name: Configure AWS credentials from test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{secrets.TEST_AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{secrets.TEST_AWS_SECRET_KEY}}
+          aws-access-key-id: ${{secrets.TEST_AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.TEST_AWS_SECRET_ACCESS_KEY}}
           aws-session-token: ${{secrets.TEST_AWS_SESSION_TOKEN}}
-          aws-region: ap-southeast-2
+          aws-region: ${{env.AWS_REGION}}
       
       - name: Copy files to the AWS S3 bucket with the AWS CLI
         run: aws s3 cp ${{env.PUBLISH_DIR}}/${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip s3://${{env.AWS_S3_BUCKET}}
@@ -72,12 +76,42 @@ jobs:
           template: ${{env.CFN_TEMPLATE}}
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
+            DomainName=${{env.DOMAIN_NAME}},
             ProjectName=${{env.PROJECT_NAME}},
             Environment=${{env.ENVIRONMENT_NAME}},
             BucketName=${{env.AWS_S3_BUCKET}},
             CodeKey=${{env.PROJECT_NAME}}-${{env.ENVIRONMENT_NAME}}-${{github.run_number}}.zip,
-            ParamStoreKMSMasterKeyIdARN=/${{env.PROJECT_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/KMS-Master-KeyIdARN,
-            ParamStoreLambdaSecurityGroupIds=/${{env.PROJECT_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-Security-GroupIds,
-            ParamStoreLambdaSubnetIds=/${{env.PROJECT_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-SubnetIds
+            ParamStoreKMSMasterKeyIdARN=/${{env.DOMAIN_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/KMS-Master-KeyIdARN,
+            ParamStoreLambdaSecurityGroupIds=/${{env.DOMAIN_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-Security-GroupIds,
+            ParamStoreLambdaSubnetIds=/${{env.DOMAIN_NAME}}/${{env.ENVIRONMENT_NAME}}/CloudFormation/Lambda-SubnetIds
+          capabilities: "CAPABILITY_IAM, CAPABILITY_NAMED_IAM, CAPABILITY_AUTO_EXPAND"
+          role-arn: ${{secrets.TEST_AWS_CFN_EXECUTION_ROLE}}
+  
+  build-All-Other-Infra-test:
+    runs-on: ubuntu-latest
+
+    environment: test
+
+    env:
+      AWS_STACKNAME: ReferralServiceCommand-All-Other-Infra-test
+      CFN_TEMPLATE: ./cloudformation/DynamoDBReferralsEventStore-Template-v1
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials from test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.TEST_AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.TEST_AWS_SECRET_ACCESS_KEY}}
+          aws-session-token: ${{secrets.TEST_AWS_SESSION_TOKEN}}
+          aws-region: ${{env.AWS_REGION}}
+
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ${{env.AWS_STACKNAME}}
+          template: ${{env.CFN_TEMPLATE}}
+          no-fail-on-empty-changeset: "1"
           capabilities: "CAPABILITY_IAM, CAPABILITY_NAMED_IAM, CAPABILITY_AUTO_EXPAND"
           role-arn: ${{secrets.TEST_AWS_CFN_EXECUTION_ROLE}}
