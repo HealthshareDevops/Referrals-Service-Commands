@@ -1,9 +1,12 @@
 ﻿AWSTemplateFormatVersion: 2010-09-09
 Description: "Creates API Gateway and SQS to receive and store referrals payloads/messages."
 Parameters: 
+  DomainName: 
+    Type: String
+    Default: PatientReferralService
   ProjectName: 
     Type: String
-    Default: ReferralsServiceCommands
+    Default: ReferralServiceCommand
   Environment: 
     Type: String
     Default: sandbox
