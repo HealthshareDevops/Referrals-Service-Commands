@@ -90,6 +90,8 @@ jobs:
   build-All-Other-Infra-sandbox:
     runs-on: ubuntu-latest
 
+    environment: sandbox
+    
     env:
       AWS_STACKNAME: ReferralServiceCommand-All-Other-Infra-sandbox
       CFN_TEMPLATE: ./cloudformation/DynamoDBReferralsEventStore-Template-v1
