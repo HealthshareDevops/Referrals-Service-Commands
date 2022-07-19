@@ -14,7 +14,7 @@ Resources:
   DynamoDBReferralsEventStore:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: event-store
+      TableName: PatientReferralService-EventStore
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S

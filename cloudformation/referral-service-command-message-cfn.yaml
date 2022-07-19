@@ -1,29 +1,32 @@
 ﻿AWSTemplateFormatVersion: 2010-09-09
 Description: "Creates API Gateway and SQS to receive and store referrals payloads/messages."
 Parameters: 
+  DomainName: 
+    Type: String
+    Default: PatientReferralService
   ProjectName: 
     Type: String
-    Default: ReferralsServiceCommands
+    Default: ReferralServiceCommand
   Environment: 
     Type: String
     Default: sandbox
   BucketName:
     Type: String
-    Default: referrals-service-commands-sandbox
+    Default: patient-referral-service-sandbox
   CodeKey:
     Type: String
-    Default: ReferralsServiceCommands-sandbox-1.zip
+    Default: ReferralServiceCommand-sandbox-1.zip
   ParamStoreKMSMasterKeyIdARN: 
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /ReferralsServiceCommands/sandbox/CloudFormation/KMS-Master-KeyIdARN
+    Default: /PatientReferralService/sandbox/CloudFormation/KMS-Master-KeyIdARN
   ParamStoreLambdaSecurityGroupIds: 
     Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
     Description: "VPC security group ids to attach to lambda"
-    Default: /ReferralsServiceCommands/sandbox/CloudFormation/Lambda-Security-GroupIds
+    Default: /PatientReferralService/sandbox/CloudFormation/Lambda-Security-GroupIds
   ParamStoreLambdaSubnetIds: 
     Type: AWS::SSM::Parameter::Value<CommaDelimitedList>
     Description: "The VPC subnet ids to attach to lambda"
-    Default: /ReferralsServiceCommands/sandbox/CloudFormation/Lambda-SubnetIds
+    Default: /PatientReferralService/sandbox/CloudFormation/Lambda-SubnetIds
 
 Resources:
   ReferralsMessageApi:
